@@ -1,0 +1,83 @@
+name: Test
+
+on:
+  push:
+    branches:
+      - 2.0.x
+  pull_request:
+    branches:
+      - 2.0.x
+  workflow_dispatch:
+
+jobs:
+  cucumber:
+    name: typo3-steps test suite
+    runs-on: ubuntu-latest
+    env:
+      HEADLESS: 'true'
+      DDEV_PROJECT: typo3-intro
+      DDEV_SITE_DIR: .typo3-site
+      LAUNCH_URL: https://typo3-intro.ddev.site
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Set up DDEV
+        uses: ddev/github-action-setup-ddev@v1
+        with:
+          autostart: false
+
+      - name: Build a default TYPO3 site with DDEV
+        run: |
+          mkdir -p "$DDEV_SITE_DIR"
+          cd "$DDEV_SITE_DIR"
+          ddev config --project-type=typo3 --docroot=public --php-version=8.3 --project-name="$DDEV_PROJECT" --auto
+          ddev start
+          ddev composer create-project "typo3/cms-base-distribution:^13" . --no-interaction
+          ddev typo3 setup \
+            --server-type=other \
+            --driver=mysqli --host=db --port=3306 --dbname=db --username=db --password=db \
+            --admin-username=admin --admin-user-password='Introduction!23' \
+            --project-name="TYPO3 Introduction" \
+            --no-interaction --force
+          ddev composer require typo3/cms-introduction --no-interaction
+          # extension:setup activates the introduction package and auto-imports
+          # its demo content + site config (config/sites/introduction) — no
+          # separate impexp:import / site config needed.
+          ddev exec vendor/bin/typo3 extension:setup
+          ddev exec vendor/bin/typo3 cache:flush
+
+      - name: Run cucumber-js dry-run (ambiguity / undefined step check)
+        run: npx cucumber-js --dry-run
+
+      - name: Run typo3-steps test suite against the local DDEV site
+        run: npx cucumber-js
+
+      - name: Upload test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cucumber-report
+          path: tests/reports/
+          retention-days: 14
+
+      - name: Upload failure screenshots
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: failure-screenshots
+          path: screenshots/
+          retention-days: 14
+          if-no-files-found: ignore
