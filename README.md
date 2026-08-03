@@ -4,15 +4,15 @@ Cucumber step definitions for testing TYPO3 sites with
 [webship-js](https://webship.co/docs/webship-js/2.0.x) — a BDD browser
 automation harness built on Playwright + Cucumber-js.
 
-`@webship/typo3-steps` adds a `typo3.steps.js` step file plus `.feature` files that
+`@webship-js/typo3-steps` adds a `typo3.steps.js` step file plus `.feature` files that
 cover the main navigation (including the Bootstrap 5 "Content Examples"
 mega-menu dropdown and the collapsed mobile navbar), page headings, and the
 Bootstrap accordion content element of a TYPO3 install running the official
 [`typo3/cms-introduction`](https://packagist.org/packages/typo3/cms-introduction)
 demo content on the `bk2k/bootstrap_package` frontend theme.
 
-> Published to [npmjs.com](https://www.npmjs.com/package/@webship/typo3-steps)
-> as `@webship/typo3-steps`.
+> Published to [npmjs.com](https://www.npmjs.com/package/@webship-js/typo3-steps)
+> as `@webship-js/typo3-steps`.
 
 ## Requirements
 
@@ -22,18 +22,18 @@ demo content on the `bk2k/bootstrap_package` frontend theme.
 ## Install
 
 ```bash
-npm install --save-dev @webship/typo3-steps
+npm install --save-dev @webship-js/typo3-steps
 ```
 
 ## Quick start
 
-1. Add `@webship/typo3-steps`'s step file to your webship-js `cucumber.js`
+1. Add `@webship-js/typo3-steps`'s step file to your webship-js `cucumber.js`
    `require` array:
 
    ```javascript
    require: [
      'node_modules/webship-js/tests/step-definitions/**/*.js',
-     'node_modules/@webship/typo3-steps/tests/step-definitions/typo3.steps.js',
+     'node_modules/@webship-js/typo3-steps/tests/step-definitions/typo3.steps.js',
      'tests/step-definitions/**/*.js',
    ],
    ```

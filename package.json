@@ -1,5 +1,5 @@
 {
-  "name": "@webship/typo3-steps",
+  "name": "@webship-js/typo3-steps",
   "version": "2.0.0",
   "description": "Cucumber step definitions for testing TYPO3 sites with webship-js.",
   "main": "tests/step-definitions/typo3.steps.js",
