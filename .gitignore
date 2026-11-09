@@ -1,0 +1,9 @@
+node_modules/
+tests/reports/*.json
+tests/reports/*.html
+screenshots/
+videos/
+.typo3-site/
+*.log
+.DS_Store
+.claude/
