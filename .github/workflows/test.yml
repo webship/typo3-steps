@@ -59,6 +59,9 @@ jobs:
           ddev exec vendor/bin/typo3 extension:setup
           ddev exec vendor/bin/typo3 cache:flush
 
+      - name: Check the JSDoc examples and feature steps against the step regexes
+        run: npm run test:examples
+
       - name: Run cucumber-js dry-run (ambiguity / undefined step check)
         run: npx cucumber-js --dry-run
 

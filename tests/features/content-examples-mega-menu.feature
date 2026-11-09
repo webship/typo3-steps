@@ -1,3 +1,6 @@
+# The paths, menu labels and copy below are those of the typo3/cms-introduction
+# demo content on the bootstrap_package theme; swap them for your own content
+# when you copy this feature.
 Feature: Content Examples mega menu
   As a visitor
   I want to reach a content-example page through the "Content Examples" mega menu

@@ -1,3 +1,6 @@
+# The paths, menu labels and copy below are those of the typo3/cms-introduction
+# demo content on the bootstrap_package theme; swap them for your own content
+# when you copy this feature.
 Feature: Main navigation
   As a visitor
   I want to move between the site's top-level pages via the main menu
