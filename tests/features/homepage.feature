@@ -1,3 +1,6 @@
+# The paths, menu labels and copy below are those of the typo3/cms-introduction
+# demo content on the bootstrap_package theme; swap them for your own content
+# when you copy this feature.
 Feature: Home page
   As a visitor
   I want the TYPO3 Introduction home page to load with its key content and navigation

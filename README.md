@@ -14,6 +14,17 @@ demo content on the `bk2k/bootstrap_package` frontend theme.
 > Published to [npmjs.com](https://www.npmjs.com/package/@webship-js/typo3-steps)
 > as `@webship-js/typo3-steps`.
 
+The steps assume that theme's markup: `#mainnavigation` with
+`a.nav-link-main` links, the `.nav-style-mega` / `.dropdown-menu-mega`
+mega-menu dropdown, `h1.carousel-header` / `h1.element-header` page headings
+and the Bootstrap `.accordion-item` / `.accordion-button` accordion. A site on
+another theme needs those selectors adjusted. The reference features assert
+the Introduction demo's own paths, menu labels and copy ("Media Left",
+"short video", `/content-examples/interactive/accordion`, ...); that is
+deliberate for a demo install, so swap those values for your site's content
+when you copy a feature. The steps themselves carry no site data: every
+label, title and phrase is a capture group.
+
 ## Requirements
 
 - Node.js >= 20
@@ -69,13 +80,21 @@ npm install --save-dev @webship-js/typo3-steps
 | Step | Type |
 | --- | --- |
 | `I open the "<name>" menu item` | When |
-| `I should see the "<name>" menu item` | Then |
+| `I should( not) see the "<name>" menu item` | Then |
 | `I open the (content examples )mega menu` | When |
 | `I open the "<name>" dropdown link` | When |
-| `I should see the "<name>" dropdown link` | Then |
-| `I should be viewing the "<title>" page` | Then |
+| `I should( not) see the "<name>" dropdown link` | Then |
+| `I should( not) be viewing the "<title>" page` | Then |
 | `I open the "<label>" accordion panel` | When |
-| `I should see "<phrase>" in the "<label>" accordion panel` | Then |
+| `I should( not) see "<phrase>" in the "<label>" accordion panel` | Then |
+
+Every Then step takes `should` or `should not`, every step takes `I`, `we` or
+no pronoun, and every failure is a friendly message with a hint (no
+Playwright stack). Assertions wait on their locator for the
+`minWaitTime.page` budget (at least 10 s) instead of reading the page once.
+`npm run test:examples` checks that every `Example #n:` line in the step
+JSDoc matches its own step (and no webship-js core step) and that every
+feature step is defined exactly once; CI runs it before the dry run.
 
 Full details and Gherkin examples for every step are documented inline in
 [`tests/step-definitions/typo3.steps.js`](tests/step-definitions/typo3.steps.js)
