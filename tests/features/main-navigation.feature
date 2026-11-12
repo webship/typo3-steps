@@ -3,8 +3,8 @@
 # when you copy this feature.
 Feature: Main navigation
   As a visitor
-  I want to move between the site's top-level pages via the main menu
-  So that I can reach the content I'm looking for
+  I want to move between the top-level pages of the site through the main menu
+  So that I can reach the content I am looking for
 
   Scenario: Open the Features page from the main menu
     Given I am on the homepage

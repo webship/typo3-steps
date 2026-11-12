@@ -17,10 +17,11 @@ theme), built with DDEV by `scripts/build-site.sh`.
 | `contact-form.feature` | The contact form of the form framework: mandatory fields, an invalid email address and the confirmation page. |
 | `error-404.feature` | The "page not found" answer for an unknown address. |
 | `backend-login.feature` | The backend login form, logging in by a handle of the users registry, a refused password and logging out. |
-| `backend-modules.feature` | Opening modules from the module menu, two modules with one label, and the modules an administrator and an editor have. |
+| `backend-modules.feature` | Opening modules from the module menu, two modules with one label, the modules an administrator and an editor have, the Log module and the Forms module. |
 | `backend-page-tree.feature` | Selecting a page, reaching a deep page by its path, expanding, collapsing and filtering the page tree. |
 | `backend-caches.feature` | Flushing the frontend caches and all caches, and clearing the cache of one page. |
 | `backend-content-lifecycle.feature` | A page and a content element from start to end: validation, create, enable, add content, what visitors see, edit, hide, show, the List module, rename, disable and delete. |
+| `accessibility-audit.feature` | The accessibility audit of webship-js on the front page, content pages, pages with a form, a translated page, the backend login page and the backend shell. |
 
 Scenarios tagged `@mobile` set the `xs` breakpoint (375 px) so the navbar
 collapses behind the Bootstrap `.navbar-toggler`.

@@ -35,3 +35,17 @@ Feature: Backend modules
     And I should not see the "Extensions" module
     And I should not see the "Backend Users" module
     And I should not see the "Log" module
+
+  Scenario: The administrator reads the log
+    Given I am a logged in user with the "admin" user
+    When I open the "Log" module
+    Then the "Log" module should be active
+    And the module heading should be "Administration log"
+    And I should not see the error message "Access denied" in the module
+
+  Scenario: The editor reaches the form definitions
+    Given I am a logged in user with the "editor" user
+    When I open the "Forms" module
+    Then the "Forms" module should be active
+    And the module heading should be "Form Management"
+    And I should see "Introduction Contact Form" in the module
