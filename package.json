@@ -4,7 +4,7 @@
   "description": "Cucumber step definitions for testing TYPO3 sites with webship-js.",
   "main": "tests/step-definitions/typo3.steps.js",
   "files": [
-    "tests/step-definitions/typo3.steps.js",
+    "tests/step-definitions",
     "tests/features",
     "README.md",
     "LICENSE"
