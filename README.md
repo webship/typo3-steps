@@ -20,6 +20,10 @@ files that prove every step against a real site.
   out, the login error, the module menu, the page tree (select, expand,
   collapse, search, context menu, hidden pages), reading and clicking inside
   a module, notifications, messages and the cache actions.
+- **Records**: the record form (FormEngine) with its tabs, fields,
+  validation and its Save, Close and Delete buttons, dialogs, the content
+  elements of the Page module (add, edit, hide, unhide, delete), and the
+  tables and records of the List module.
 
 Every step is proven on **TYPO3 13 LTS with the official Introduction
 package** (`typo3/cms-introduction` 4.7 on the Bootstrap Package theme,
@@ -41,6 +45,10 @@ package** (`typo3/cms-introduction` 4.7 on the Bootstrap Package theme,
 | Content frame | `iframe[name="list_frame"]` (`#typo3-contentIframe`): the module, its `h1` and its `.callout-*` / `.alert-*` messages |
 | Page tree | `#typo3-pagetree-tree [role="treeitem"]` (`.node-name`, `.node-toggle`, `aria-expanded`, the `overlay-hidden` icon overlay), `typo3-backend-context-menu` |
 | Notifications | `#alert-container typo3-notification-message` |
+| Record form | FormEngine in the content frame: `.form-group` with its label, `[data-formengine-input-name]`, `[role="tab"]`, `.has-error`, `button[name="_savedok"]`, `.t3js-editform-close`, `.t3js-editform-delete-record` |
+| Dialogs, wizard | `typo3-backend-modal .modal` (`.modal-title`, `.modal-footer button`), `typo3-backend-new-record-wizard` in the top document |
+| Page module | `.t3-page-column` (`.t3-page-column-title`), `.t3-page-ce[data-uid]`, `.t3-page-ce-hidden`, `typo3-backend-new-content-element-wizard-button` |
+| List module | `.recordlist` (`.recordlist-heading-title`), `tr[data-uid]` (`.col-title`, `.col-control`, `.icon-overlay-hidden`) |
 
 The backend steps follow the markup of the TYPO3 13 backend and need an
 English backend (labels such as "Page", "List" and "New subpage" are matched
@@ -143,7 +151,8 @@ click "..." in the module`), so a feature never switches frames.
 | Path | Purpose |
 | --- | --- |
 | `tests/step-definitions/typo3.steps.js` | The front-end steps. |
-| `tests/step-definitions/typo3-backend.steps.js` | The backend steps. |
+| `tests/step-definitions/typo3-backend.steps.js` | The backend steps: session, modules, page tree, notifications, caches. |
+| `tests/step-definitions/typo3-backend-records.steps.js` | The record steps: record form, dialogs, Page module content elements, List module. |
 | `tests/step-definitions/typo3-helpers.js`, `typo3-backend-helpers.js` | Shared helpers (no steps): the wait budget, whole-label matching, friendly errors, the users registry, the content frame, the page tree. |
 | `tests/features/*.feature` | The features that prove the steps against the Introduction site; see [`tests/features/README.md`](tests/features/README.md). |
 | `scripts/build-site.sh` | Builds the TYPO3 Introduction site with [DDEV](https://ddev.com/). |
@@ -226,6 +235,41 @@ log of the notifications of the session from the login step on, so `I
 should see the notification "..."` also finds one that is already gone. An
 assertion uses a notification up: a second assertion needs a second
 notification.
+
+### Records
+
+| Step | Type |
+| --- | --- |
+| `I fill in the "<label>" record field with "<value>"` | When |
+| `I select "<option>" in the "<label>" record field` | When |
+| `I open the "<label>" record tab` | When |
+| `I save the record` | When |
+| `I close the record` | When |
+| `I delete the record` | When |
+| `the "<label>" record field should( not) contain "<text>"` | Then |
+| `the "<label>" record field should( not) be marked as invalid` | Then |
+| `I (confirm\|cancel) the dialog` | When |
+| `I press "<label>" in the dialog` | When |
+| `I should( not) see the dialog "<title>"` | Then |
+| `I add a "<type>" content element to the "<column>" column` | When |
+| `I should( not) see the "<header>" content element in the page module` / `in the "<column>" column` | Then |
+| `I (edit\|hide\|unhide\|delete) the "<header>" content element` | When |
+| `the "<header>" content element should( not) be hidden` | Then |
+| `I should( not) see the "<table>" table in the list module` | Then |
+| `I should( not) see the record "<title>" in the "<table>" table` | Then |
+| `I (edit\|hide\|unhide\|delete) the record "<title>" in the "<table>" table` | When |
+| `the record "<title>" in the "<table>" table should( not) be hidden` | Then |
+| `there is no "<path>" page` | Given |
+
+A page is created, edited, enabled, disabled and deleted through the
+context menu of the page tree (`I choose "New subpage" from the context menu
+of the "<path>" page`) and the record form. A new page is hidden until it is
+enabled. `Given there is no "<path>" page` deletes a page a scenario is about
+to create when an earlier run left it behind, and does nothing otherwise.
+
+A logged in backend user previews hidden pages and content on the website.
+A scenario that checks what a visitor sees starts with `Given I am not
+logged in`.
 
 ### Conventions
 

@@ -20,6 +20,7 @@ theme), built with DDEV by `scripts/build-site.sh`.
 | `backend-modules.feature` | Opening modules from the module menu, two modules with one label, and the modules an administrator and an editor have. |
 | `backend-page-tree.feature` | Selecting a page, reaching a deep page by its path, expanding, collapsing and filtering the page tree. |
 | `backend-caches.feature` | Flushing the frontend caches and all caches, and clearing the cache of one page. |
+| `backend-content-lifecycle.feature` | A page and a content element from start to end: validation, create, enable, add content, what visitors see, edit, hide, show, the List module, rename, disable and delete. |
 
 Scenarios tagged `@mobile` set the `xs` breakpoint (375 px) so the navbar
 collapses behind the Bootstrap `.navbar-toggler`.
