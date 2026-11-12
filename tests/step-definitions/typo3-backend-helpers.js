@@ -140,13 +140,15 @@ function contentFrame(world) {
 async function waitForModule(world) {
   const page = world.page;
   const timeout = budget(world);
-  await smartSettle(page, 1500);
-  const frame = contentFrame(world);
-  await frame.locator('body').first().waitFor({ state: 'attached', timeout }).catch(() => {});
-  await page.locator('.scaffold-content-module typo3-backend-progress-bar, #nprogress').first().waitFor({ state: 'detached', timeout }).catch(() => {});
+  // A short pause lets a navigation that was just triggered begin; the
+  // backend keeps timers and polls running, so waiting for a quiet network
+  // would only spend the whole pause on every step.
+  await smartSettle(page, 400);
+  await contentFrame(world).locator('body').first().waitFor({ state: 'attached', timeout }).catch(() => {});
   const handle = page.frame({ name: 'list_frame' });
-  if (handle) await handle.waitForLoadState('domcontentloaded', { timeout }).catch(() => {});
-  await smartSettle(page, 1000);
+  if (handle) await handle.waitForLoadState('load', { timeout }).catch(() => {});
+  await page.locator('.scaffold-content-module typo3-backend-progress-bar, #nprogress').first().waitFor({ state: 'detached', timeout }).catch(() => {});
+  await smartSettle(page, 300);
 }
 
 /** The rows of the page tree with the given title, optionally at a level. */

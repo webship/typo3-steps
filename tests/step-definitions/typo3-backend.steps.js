@@ -402,10 +402,24 @@ When(/^(I |we )*click "([^"]*)?" in the module$/, async function (pronounCase, l
  *
  */
 When(/^(I |we )*select the "([^"]*)?" page in the page tree$/, async function (pronounCase, path) {
+  const page = this.page;
   const node = await revealTreePath(this, path);
   await actOrExplain('select in the page tree', path, async () => {
-    await node.locator('.node-contentlabel').first().click();
-    await node.and(this.page.locator('.node-selected')).waitFor({ state: 'visible', timeout: budget(this) }).catch(() => {});
+    const id = await node.getAttribute('data-id');
+    const shown = () => {
+      const frame = page.frame({ name: 'list_frame' });
+      return !!frame && new RegExp(`[?&]id=${id}(&|$)`).test(frame.url());
+    };
+    // The tree redraws its rows while it loads subpages, and a click that
+    // lands during a redraw is lost: click until the module shows the page.
+    const deadline = Date.now() + budget(this);
+    for (;;) {
+      await node.locator('.node-contentlabel').first().click();
+      const until = Math.min(Date.now() + 3000, deadline);
+      while (!shown() && Date.now() < until) await smartSettle(page, 200);
+      if (shown()) return;
+      if (Date.now() >= deadline) throw new Error(`the module did not open the page with id ${id}`);
+    }
   }, TREE_HINT);
   await waitForModule(this);
 });
