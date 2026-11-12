@@ -29,6 +29,12 @@ module.exports = {
     },
     worldParameters: {
       launchUrl: process.env.LAUNCH_URL || 'https://typo3-intro.ddev.site',
+      // The backend accounts `Given I am a logged in user with the "<handle>" user` logs in as.
+      // Accounts are configuration: scripts/build-site.sh creates them, no feature does.
+      users: {
+        admin:  { username: process.env.TYPO3_ADMIN_USER || 'admin',   password: process.env.TYPO3_ADMIN_PASS || 'Introduction!23' },
+        editor: { username: process.env.TYPO3_EDITOR_USER || 'editor', password: process.env.TYPO3_EDITOR_PASS || 'Editor!Review23' },
+      },
       // Video of the browser: 'off', 'on', 'on-failure' or 'tag' (scenarios tagged @video; @no-video opts out).
       video: { mode: process.env.WEBSHIP_VIDEO || 'off', dir: './videos', size: { width: 1280, height: 720 }, filenamePattern: '{datetime}.{feature_file}.{scenario}.{status}.{ext}' },
       // JavaScript errors the page raises: 'warn' reports them, 'fail' fails the scenario, 'off' ignores them; @js-fail, @js-warn and @js-off per scenario.

@@ -16,9 +16,16 @@ theme), built with DDEV by `scripts/build-site.sh`.
 | `search.feature` | The Indexed Search form, a search with results and a search without. |
 | `contact-form.feature` | The contact form of the form framework: mandatory fields, an invalid email address and the confirmation page. |
 | `error-404.feature` | The "page not found" answer for an unknown address. |
+| `backend-login.feature` | The backend login form, logging in by a handle of the users registry, a refused password and logging out. |
+| `backend-modules.feature` | Opening modules from the module menu, two modules with one label, and the modules an administrator and an editor have. |
+| `backend-page-tree.feature` | Selecting a page, reaching a deep page by its path, expanding, collapsing and filtering the page tree. |
+| `backend-caches.feature` | Flushing the frontend caches and all caches, and clearing the cache of one page. |
 
 Scenarios tagged `@mobile` set the `xs` breakpoint (375 px) so the navbar
 collapses behind the Bootstrap `.navbar-toggler`.
+
+The backend features log in with the accounts of the users registry in
+`cucumber.js` (`admin` and `editor`), which `scripts/build-site.sh` creates.
 
 The TYPO3 steps are in `../step-definitions/`; every other step is part of
 webship-js.
