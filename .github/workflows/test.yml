@@ -39,25 +39,11 @@ jobs:
         with:
           autostart: false
 
-      - name: Build a default TYPO3 site with DDEV
+      - name: Build the TYPO3 Introduction site with DDEV
         run: |
           mkdir -p "$DDEV_SITE_DIR"
           cd "$DDEV_SITE_DIR"
-          ddev config --project-type=typo3 --docroot=public --php-version=8.3 --project-name="$DDEV_PROJECT" --auto
-          ddev start
-          ddev composer create-project "typo3/cms-base-distribution:^13" . --no-interaction
-          ddev typo3 setup \
-            --server-type=other \
-            --driver=mysqli --host=db --port=3306 --dbname=db --username=db --password=db \
-            --admin-username=admin --admin-user-password='Introduction!23' \
-            --project-name="TYPO3 Introduction" \
-            --no-interaction --force
-          ddev composer require typo3/cms-introduction --no-interaction
-          # extension:setup activates the introduction package and auto-imports
-          # its demo content + site config (config/sites/introduction) — no
-          # separate impexp:import / site config needed.
-          ddev exec vendor/bin/typo3 extension:setup
-          ddev exec vendor/bin/typo3 cache:flush
+          bash "$GITHUB_WORKSPACE/scripts/build-site.sh"
 
       - name: Check the JSDoc examples and feature steps against the step regexes
         run: npm run test:examples

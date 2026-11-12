@@ -19,6 +19,14 @@ Feature: Accordion content element
     When I open the "Media Left" accordion panel
     Then I should see "short video" in the "Media Left" accordion panel
 
+  Scenario: Opening an open panel leaves it open, and closing hides it
+    When I open the "No Media" accordion panel
+    And I open the "No Media" accordion panel
+    Then the "No Media" accordion panel should be open
+    And the "Media Right" accordion panel should not be open
+    When I close the "No Media" accordion panel
+    Then the "No Media" accordion panel should not be open
+
   Scenario: Expand another panel and read its content
     When I open the "Media Right" accordion panel
     Then I should see "meanest place" in the "Media Right" accordion panel

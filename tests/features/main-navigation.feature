@@ -38,3 +38,23 @@ Feature: Main navigation
     And I reload the page
     And I open the "Pages" menu item
     Then I should be on "/pages"
+
+  Scenario: The menu item of the page being viewed is the current one
+    Given I am on "/features"
+    Then the "Features" menu item should be current
+    And the "Customize" menu item should not be current
+
+  Scenario: A label is matched as a whole
+    Given I am on the homepage
+    Then I should see the "Pages" menu item
+    And I should not see the "Page" menu item
+
+  Scenario: Open a subpage through a simple dropdown
+    Given I am on the homepage
+    When I open the dropdown of the "Pages" menu item
+    Then I should see the "2 Columns" dropdown link
+    When I open the "2 Columns" dropdown link
+    Then I should be on "/pages/2-columns"
+    And the "Pages" menu item should be active
+    And the "Pages" menu item should not be current
+    And the "Customize" menu item should not be active
