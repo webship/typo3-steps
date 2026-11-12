@@ -271,6 +271,16 @@ A logged in backend user previews hidden pages and content on the website.
 A scenario that checks what a visitor sees starts with `Given I am not
 logged in`.
 
+### Accessibility
+
+The accessibility audit is part of webship-js (axe-core), so the pack adds
+no step of its own. [`tests/features/accessibility-audit.feature`](tests/features/accessibility-audit.feature)
+shows how to hold the front page, content pages, pages with a form and the
+backend login page at a level: `the page should have no serious
+accessibility violations`, `the page should have no accessibility
+violations`, `every form field should have an accessible label`, `the page
+should not violate the accessibility rule "<rule>"`.
+
 ### Conventions
 
 - Every Then step takes `should` or `should not`, and every step that names
