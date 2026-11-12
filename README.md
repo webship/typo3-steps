@@ -16,6 +16,10 @@ files that prove every step against a real site.
   headings, content elements by type and by header, the accordion, the
   Indexed Search form and its results, forms of the form framework with
   their validation messages, the "page not found" answer and the generator.
+- **Backend**: logging in by a handle from a users registry and logging
+  out, the login error, the module menu, the page tree (select, expand,
+  collapse, search, context menu, hidden pages), reading and clicking inside
+  a module, notifications, messages and the cache actions.
 
 Every step is proven on **TYPO3 13 LTS with the official Introduction
 package** (`typo3/cms-introduction` 4.7 on the Bootstrap Package theme,
@@ -32,9 +36,17 @@ package** (`typo3/cms-introduction` 4.7 on the Bootstrap Package theme,
 | Accordion | `.accordion-item`, `.accordion-button`, `.accordion-body` (Bootstrap 5) |
 | Search | `#tx-indexedsearch-searchbox-sword`, `.tx-indexedsearch-res`, `.tx-indexedsearch-info-noresult` (Indexed Search) |
 | Forms | `form[id^="<identifier>"]`, `.form-navigation`, `.is-invalid` / `.has-error`, `.invalid-feedback` (form framework) |
+| Backend login | `/typo3/login`: `#t3-username`, `#t3-password`, `#t3-login-submit`, `#t3-login-error` |
+| Backend shell | `.scaffold`, `.scaffold-modulemenu a.modulemenu-action[data-modulemenu-identifier]`, `.toolbar-item-user`, the "Clear cache" toolbar item |
+| Content frame | `iframe[name="list_frame"]` (`#typo3-contentIframe`): the module, its `h1` and its `.callout-*` / `.alert-*` messages |
+| Page tree | `#typo3-pagetree-tree [role="treeitem"]` (`.node-name`, `.node-toggle`, `aria-expanded`, the `overlay-hidden` icon overlay), `typo3-backend-context-menu` |
+| Notifications | `#alert-container typo3-notification-message` |
 
-The content element, search and form steps follow markup TYPO3 itself
-renders, so they work on any theme that keeps it. The navigation,
+The backend steps follow the markup of the TYPO3 13 backend and need an
+English backend (labels such as "Page", "List" and "New subpage" are matched
+as text; a module can also be named by its identifier). The content
+element, search and form steps follow markup TYPO3 itself renders, so they
+work on any theme that keeps it. The navigation,
 subnavigation, breadcrumb and language steps follow the Bootstrap Package
 theme; a site on another theme needs its own steps for those.
 
@@ -75,22 +87,64 @@ npm install --save-dev @webship-js/typo3-steps
    },
    ```
 
-3. Copy a feature file from [`tests/features/`](tests/features/) into the
+3. For the backend steps, name the accounts the scenarios log in as (see
+   [Users registry](#users-registry)).
+
+4. Copy a feature file from [`tests/features/`](tests/features/) into the
    `tests/features/` directory of your project and replace the menu labels,
    paths and phrases with those of your site.
 
-4. Run the suite:
+5. Run the suite:
 
    ```bash
    npx cucumber-js
    ```
+
+## Users registry
+
+Feature files never carry credentials. The `users` block of
+`worldParameters` maps the handle a scenario uses to a backend account:
+
+```javascript
+worldParameters: {
+  users: {
+    admin:  { username: process.env.TYPO3_ADMIN_USER || 'admin',   password: process.env.TYPO3_ADMIN_PASS },
+    editor: { username: process.env.TYPO3_EDITOR_USER || 'editor', password: process.env.TYPO3_EDITOR_PASS },
+  },
+},
+```
+
+```gherkin
+Given I am a logged in user with the "editor" user
+```
+
+Accounts are configuration: create them once when the site is built, never
+from a feature. On the command line that is
+
+```bash
+vendor/bin/typo3 backend:user:create --username=editor --password='...' --email=editor@example.com --groups=<group ids> --no-interaction
+```
+
+The steps log in through the login form of `/typo3`. An account with
+multi-factor authentication stops at the code form, which the steps do not
+fill in; use accounts without it for automated tests.
+
+## The backend and its content frame
+
+The backend is a shell around an iframe. The module menu, the toolbar, the
+page tree and the notifications are in the top document; the module itself
+is in the content frame (`iframe[name="list_frame"]`). webship-js's own `I
+should see "..."` only reads the top document. The steps of this pack look
+in the right document on their own (`I should see "..." in the module`, `I
+click "..." in the module`), so a feature never switches frames.
 
 ## What is included
 
 | Path | Purpose |
 | --- | --- |
 | `tests/step-definitions/typo3.steps.js` | The front-end steps. |
-| `tests/step-definitions/typo3-helpers.js` | Shared helpers (no steps): the wait budget, whole-label matching, friendly errors. |
+| `tests/step-definitions/typo3-backend.steps.js` | The backend steps. |
+| `tests/step-definitions/typo3-helpers.js`, `typo3-backend-helpers.js` | Shared helpers (no steps): the wait budget, whole-label matching, friendly errors, the users registry, the content frame, the page tree. |
 | `tests/features/*.feature` | The features that prove the steps against the Introduction site; see [`tests/features/README.md`](tests/features/README.md). |
 | `scripts/build-site.sh` | Builds the TYPO3 Introduction site with [DDEV](https://ddev.com/). |
 | `.github/workflows/test.yml` | CI: builds the site, checks the examples, runs the dry run and the full suite on every push and pull request. |
@@ -134,6 +188,45 @@ A language is named by its label in the menu ("Deutsch"), its title
 ("German") or its code ("de-DE"). The language a page declares is checked
 with webship-js's own `the page language should be "de-DE"`.
 
+### Backend
+
+| Step | Type |
+| --- | --- |
+| `I am a logged in( backend) user with the "<handle>" user` | Given |
+| `I am not logged in` | Given |
+| `I log in to the backend as "<username>" with password "<password>"` | When |
+| `I log out( of the backend)` | When |
+| `I should( not) be logged in( as "<handle>")` | Then |
+| `I should( not) see a login error` / `the login error "<text>"` | Then |
+| `I open the "<module>" module` | When |
+| `I should( not) see the "<module>" module` | Then |
+| `the "<module>" module should( not) be active` | Then |
+| `I should( not) see "<phrase>" in the module` | Then |
+| `the module heading should( not) be "<title>"` | Then |
+| `I click "<label>" in the module` | When |
+| `I should( not) see the (success\|info\|notice\|warning\|error) message "<text>" in the module` | Then |
+| `I select the "<path>" page in the page tree` | When |
+| `I (expand\|collapse) the "<path>" page in the page tree` | When |
+| `I should( not) see the "<path>" page in the page tree` | Then |
+| `the "<path>" page should( not) be hidden in the page tree` | Then |
+| `I search the page tree for "<words>"` | When |
+| `I choose "<action>" from the context menu of the "<path>" page` | When |
+| `I should( not) see the notification "<text>"` | Then |
+| `I flush (the frontend\|all) caches` | When |
+| `I clear the cache of the page` | When |
+
+A module is named by its label ("Page"), by "Group > Label" when two
+modules share a label ("Admin Tools > Settings"), or by its identifier
+("web_layout"). A page of the page tree is named by its title, or by its
+path from a page that is already shown ("Congratulations > Content Examples
+> Text > Rich Text"); every page on the path is expanded on the way.
+
+Notifications leave the screen after one to five seconds. The steps keep a
+log of the notifications of the session from the login step on, so `I
+should see the notification "..."` also finds one that is already gone. An
+assertion uses a notification up: a second assertion needs a second
+notification.
+
 ### Conventions
 
 - Every Then step takes `should` or `should not`, and every step that names
@@ -169,7 +262,8 @@ LAUNCH_URL=https://typo3-intro.ddev.site npx cucumber-js
 ```
 
 `scripts/build-site.sh` installs TYPO3 with `typo3 setup`, adds
-`typo3/cms-introduction`, and applies two corrections the demo content needs
+`typo3/cms-introduction`, creates the `editor` account of the users registry
+(a member of the "Advanced editors" group of the demo content), and applies two corrections the demo content needs
 on TYPO3 13.4: it runs the upgrade wizard that turns the search plugin into
 a content element, and it makes Indexed Search use its own result templates
 (those of Bootstrap Package 15 call a ViewHelper that TYPO3 13.4 no longer
