@@ -21,4 +21,4 @@ Feature: Content elements
 
   Scenario: Every page names TYPO3 as its generator
     Given I am on the homepage
-    Then the site should be running TYPO3
+    Then the page generator should start with "TYPO3"

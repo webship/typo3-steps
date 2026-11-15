@@ -833,26 +833,28 @@ Then(/^(I |we )*should( not)* be on the (?:404|page not found) page$/, async fun
 });
 
 /**
- * Assert the page declares (or does not declare) TYPO3 as its generator:
- * `<meta name="generator" content="TYPO3 CMS">`, which every TYPO3 front-end
- * page carries unless the site removes it.
+ * Assert what the page's generator meta tag says: the whole content
+ * ("be"), its start ("start with") or a part of it ("contain"), without
+ * regard to case. The name of the generator is a value of the step.
  *
- * Example #1: Then the site should be running TYPO3
- * Example #2: And the site should be running TYPO3
- * Example #3: Then the site should not be running TYPO3
- * Example #4: But the site should not be running TYPO3
- * Example #5: Then the site should be running TYPO3 CMS
+ * Example #1: Then the page generator should start with "TYPO3"
+ * Example #2: And the page generator should be "TYPO3 CMS"
+ * Example #3: Then the page generator should not contain "Joomla"
+ * Example #4: But the page generator should not start with "WordPress"
+ * Example #5: Then page generator should contain "TYPO3"
  *
  */
-Then(/^the site should( not)* be running TYPO3(?: CMS)?$/, async function (notCase) {
-  const content = (await this.page.locator('meta[name="generator"]').first().getAttribute('content', { timeout: 3000 }).catch(() => null)) || '';
-  const is = /typo3/i.test(content);
-  if (notCase ? is : !is) {
+Then(/^(?:the )?page generator should( not)* (be|start with|contain) "([^"]*)"$/, async function (notCase, mode, expected) {
+  const content = await this.page.locator('meta[name="generator"]').first().getAttribute('content', { timeout: 3000 }).catch(() => null);
+  const found = (content || '').toLowerCase();
+  const wanted = expected.toLowerCase();
+  const matches = content !== null && (mode === 'be' ? found === wanted : mode === 'start with' ? found.startsWith(wanted) : found.includes(wanted));
+  if (matches === !!notCase) {
     throw friendly({
       message: notCase
-        ? `Expected the page not to name TYPO3 as its generator, but the generator is "${content}".`
-        : `Expected the page to name TYPO3 as its generator, but the generator was "${content || '(none)'}".`,
-      hint: 'The step reads `<meta name="generator">`. A site can remove the tag, and backend pages do not carry it.',
+        ? `Expected the page generator not to ${mode} "${expected}", but the generator is "${content}".`
+        : `Expected the page generator to ${mode} "${expected}", but it is ${content === null ? 'missing' : `"${content}"`}.`,
+      hint: 'The step reads `<meta name="generator">`: every front-end page carries `content="TYPO3 CMS"` unless the site removes it.',
     });
   }
 });
