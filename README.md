@@ -13,11 +13,6 @@ The pack adds the steps a TYPO3 tester needs on top of webship-js's own
 vocabulary (click, fill in, see, the accessibility audit), and the feature
 files that prove every step against a real site.
 
-- **Front end**: the main navigation with its dropdowns, mega menu and
-  mobile navbar, the subnavigation, the breadcrumb, the language menu, page
-  headings, content elements by type and by header, the accordion, the
-  Indexed Search form and its results, forms of the form framework with
-  their validation messages, the "page not found" answer and the generator.
 - **Backend**: logging in by a handle from a users registry and logging
   out, the login error, the module menu, the page tree (select, expand,
   collapse, search, context menu, hidden pages), reading and clicking inside
@@ -26,6 +21,11 @@ files that prove every step against a real site.
   validation and its Save, Close and Delete buttons, dialogs, the content
   elements of the Page module (add, edit, hide, unhide, delete), and the
   tables and records of the List module.
+- **Front end**: the main navigation with its dropdowns, mega menu and
+  mobile navbar, the subnavigation, the breadcrumb, the language menu, page
+  headings, content elements by type and by header, the accordion, the
+  Indexed Search form and its results, forms of the form framework with
+  their validation messages, the "page not found" answer and the generator.
 
 Every step is proven on **TYPO3 13 LTS with the official Introduction
 package** (`typo3/cms-introduction` 4.7 on the Bootstrap Package theme,
@@ -152,9 +152,9 @@ click "..." in the module`), so a feature never switches frames.
 
 | Path | Purpose |
 | --- | --- |
-| `tests/step-definitions/typo3.steps.js` | The front-end steps. |
 | `tests/step-definitions/typo3-backend.steps.js` | The backend steps: session, modules, page tree, notifications, caches. |
 | `tests/step-definitions/typo3-backend-records.steps.js` | The record steps: record form, dialogs, Page module content elements, List module. |
+| `tests/step-definitions/typo3.steps.js` | The front-end steps. |
 | `tests/step-definitions/typo3-helpers.js`, `typo3-backend-helpers.js` | Shared helpers (no steps): the wait budget, whole-label matching, friendly errors, the users registry, the content frame, the page tree. |
 | `tests/features/*.feature` | The features that prove the steps against the Introduction site; see [`tests/features/README.md`](tests/features/README.md). |
 | `scripts/build-site.sh` | Builds the TYPO3 Introduction site with [DDEV](https://ddev.com/). |
@@ -162,51 +162,14 @@ click "..." in the module`), so a feature never switches frames.
 
 ## Step catalogue
 
-### Front end
-
-| Step | Type |
-| --- | --- |
-| `I open the "<label>" menu item` | When |
-| `I should( not) see the "<label>" menu item` | Then |
-| `the "<label>" menu item should( not) be (current\|active)` | Then |
-| `I open the dropdown of the "<label>" menu item` | When |
-| `I open the (content examples )mega menu` | When |
-| `I open the "<label>" dropdown link` | When |
-| `I should( not) see the "<label>" dropdown link` | Then |
-| `I open the "<label>" subnavigation item` | When |
-| `I should( not) see the "<label>" subnavigation item` | Then |
-| `I should( not) see the breadcrumb` | Then |
-| `the breadcrumb should( not) contain "<label>"` / `"<label>" should( not) be in the breadcrumb` | Then |
-| `I switch to the "<language>" language` | When |
-| `the "<language>" language should( not) be available` | Then |
-| `I should( not) be viewing the "<title>" page` | Then |
-| `I should( not) see a "<type>" content element` | Then |
-| `I should see <count> "<type>" content elements` | Then |
-| `I should( not) see "<phrase>" in the "<header>" content element` | Then |
-| `I (open\|close) the "<label>" accordion panel` | When |
-| `the "<label>" accordion panel should( not) be open` | Then |
-| `I should( not) see "<phrase>" in the "<label>" accordion panel` | Then |
-| `I search the site for "<words>"` | When |
-| `I should( not) see search results` / `I should see no search results` | Then |
-| `I should( not) see "<title>" in the search results` | Then |
-| `I submit the "<identifier>" form` | When |
-| `the "<label>" field should( not) be marked as invalid` | Then |
-| `I should( not) see the error "<message>" for the "<label>" field` | Then |
-| `I should( not) be on the 404 page` | Then |
-| `the page generator should( not) (be\|start with\|contain) "<text>"` | Then |
-
-A language is named by its label in the menu ("Deutsch"), its title
-("German") or its code ("de-DE"). The language a page declares is checked
-with webship-js's own `the page language should be "de-DE"`.
-
 ### Backend
 
 | Step | Type |
 | --- | --- |
 | `I am a logged in( backend) user with the "<handle>" user` | Given |
-| `I am not logged in` | Given |
 | `I log in to the backend as "<username>" with password "<password>"` | When |
 | `I log out( of the backend)` | When |
+| `I am not logged in` | Given |
 | `I should( not) be logged in( as "<handle>")` | Then |
 | `I should( not) see a login error` / `the login error "<text>"` | Then |
 | `I open the "<module>" module` | When |
@@ -272,6 +235,43 @@ to create when an earlier run left it behind, and does nothing otherwise.
 A logged in backend user previews hidden pages and content on the website.
 A scenario that checks what a visitor sees starts with `Given I am not
 logged in`.
+
+### Front end
+
+| Step | Type |
+| --- | --- |
+| `I open the "<label>" menu item` | When |
+| `I should( not) see the "<label>" menu item` | Then |
+| `the "<label>" menu item should( not) be (current\|active)` | Then |
+| `I open the dropdown of the "<label>" menu item` | When |
+| `I open the (content examples )mega menu` | When |
+| `I open the "<label>" dropdown link` | When |
+| `I should( not) see the "<label>" dropdown link` | Then |
+| `I open the "<label>" subnavigation item` | When |
+| `I should( not) see the "<label>" subnavigation item` | Then |
+| `I should( not) see the breadcrumb` | Then |
+| `the breadcrumb should( not) contain "<label>"` / `"<label>" should( not) be in the breadcrumb` | Then |
+| `I switch to the "<language>" language` | When |
+| `the "<language>" language should( not) be available` | Then |
+| `I should( not) be viewing the "<title>" page` | Then |
+| `I should( not) see a "<type>" content element` | Then |
+| `I should see <count> "<type>" content elements` | Then |
+| `I should( not) see "<phrase>" in the "<header>" content element` | Then |
+| `I (open\|close) the "<label>" accordion panel` | When |
+| `the "<label>" accordion panel should( not) be open` | Then |
+| `I should( not) see "<phrase>" in the "<label>" accordion panel` | Then |
+| `I search the site for "<words>"` | When |
+| `I should( not) see search results` / `I should see no search results` | Then |
+| `I should( not) see "<title>" in the search results` | Then |
+| `I submit the "<identifier>" form` | When |
+| `the "<label>" field should( not) be marked as invalid` | Then |
+| `I should( not) see the error "<message>" for the "<label>" field` | Then |
+| `I should( not) be on the 404 page` | Then |
+| `the page generator should( not) (be\|start with\|contain) "<text>"` | Then |
+
+A language is named by its label in the menu ("Deutsch"), its title
+("German") or its code ("de-DE"). The language a page declares is checked
+with webship-js's own `the page language should be "de-DE"`.
 
 ### Accessibility
 
