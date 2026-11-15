@@ -1,3 +1,5 @@
+<p align="center"><img src="https://raw.githubusercontent.com/webship/typo3-steps/2.0.x/assets/logo.svg" alt="TYPO3 logo" width="96"></p>
+
 # typo3-steps
 
 Cucumber step definitions for testing TYPO3 sites with
@@ -332,3 +334,7 @@ ships).
 ## License
 
 MIT. See [LICENSE](LICENSE).
+
+## Logo
+
+The TYPO3 logo in this README comes from Simple Icons 16.37.0 (CC0-1.0), filled with the colour the set lists for the brand. The TYPO3 name and logo are trademarks of their owner; this pack is not affiliated with or endorsed by them.
