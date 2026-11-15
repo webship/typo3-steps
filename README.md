@@ -191,7 +191,7 @@ click "..." in the module`), so a feature never switches frames.
 | `the "<label>" field should( not) be marked as invalid` | Then |
 | `I should( not) see the error "<message>" for the "<label>" field` | Then |
 | `I should( not) be on the 404 page` | Then |
-| `the site should( not) be running TYPO3` | Then |
+| `the page generator should( not) (be\|start with\|contain) "<text>"` | Then |
 
 A language is named by its label in the menu ("Deutsch"), its title
 ("German") or its code ("de-DE"). The language a page declares is checked
