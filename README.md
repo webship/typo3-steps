@@ -139,6 +139,24 @@ The steps log in through the login form of `/typo3`. An account with
 multi-factor authentication stops at the code form, which the steps do not
 fill in; use accounts without it for automated tests.
 
+## Test users
+
+The accounts this repository's suite logs in as, exactly as `cucumber.js` lists
+them in `worldParameters.users` (the default values; each one can be replaced
+through `TYPO3_ADMIN_USER` / `TYPO3_ADMIN_PASS` and `TYPO3_EDITOR_USER` /
+`TYPO3_EDITOR_PASS`). [`scripts/build-site.sh`](scripts/build-site.sh) creates
+them on the local test site, and CI does the same on the runner: `typo3 setup`
+creates `admin` (an administrator), `backend:user:create` the `editor`, a member
+of the "Advanced editors" group of the demo content. They are placeholder
+credentials of that throwaway site, not of any real one.
+
+```json
+{
+  "admin": { "username": "admin", "password": "Introduction!23" },
+  "editor": { "username": "editor", "password": "Editor!Review23" }
+}
+```
+
 ## The backend and its content frame
 
 The backend is a shell around an iframe. The module menu, the toolbar, the
