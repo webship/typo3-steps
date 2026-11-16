@@ -295,7 +295,9 @@ should not violate the accessibility rule "<rule>"`.
   least 10 seconds); no step reads the page once or sleeps.
 - `npm run test:examples` checks that every `Example #n:` line of a step
   docblock matches its own step and no webship-js core step, and that every
-  feature step is defined exactly once. CI runs it before the dry run.
+  feature step is defined exactly once. `npm run test:paths` checks that a
+  feature or a scenario named on the command line runs alone. CI runs both
+  before the dry run.
 
 The Gherkin examples of every step are in its docblock in
 [`tests/step-definitions/`](tests/step-definitions/).
@@ -327,6 +329,7 @@ ships).
 
 ### Lanes, subsets and the settings webship-js reads
 
+- `npx cucumber-js tests/features/search.feature` runs one feature and `npx cucumber-js tests/features/search.feature:<line>` one scenario (the line of its `Scenario:`); the paths of `cucumber.js` are left out when the command line names any.
 - `FEATURES=tests/features/a.feature,tests/features/b.feature npm test` runs a subset of the feature files; `CUCUMBER_TAGS=@critical npm test` runs a tag lane (the default run leaves `@wip` out).
 - `cucumber.js` carries the `video` block (`WEBSHIP_VIDEO=on-failure` records the browser) and the `javascript` block (`WEBSHIP_JS_ERROR_MODE=fail` fails a scenario on a JavaScript error; `@js-off` silences one scenario) that webship-js reads.
 - The step timeout is webship-js's own (45 seconds, set when it loads); `WEBSHIP_STEP_TIMEOUT=<milliseconds>` changes it, a `timeout` key in `cucumber.js` does not.
