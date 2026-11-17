@@ -90,6 +90,7 @@ Feature: Pages and content elements
     When I select the "Congratulations > 404 > Webship test page" page in the page tree
     And I open the "List" module
     Then I should see the "Page Content" table in the list module
+    And I should not see the "Backend user" table in the list module
     And I should see the record "Webship edited header" in the "Page Content" table
     And I should not see the record "Webship test header" in the "Page Content" table
     And the record "Webship edited header" in the "Page Content" table should not be hidden
@@ -118,6 +119,27 @@ Feature: Pages and content elements
     When I delete the record "Webship listed header" in the "Page Content" table
     And I confirm the dialog
     Then I should not see the record "Webship listed header" in the "Page Content" table
+
+  Scenario: Open the page properties from the Page module
+    When I select the "Congratulations > 404 > Webship test page" page in the page tree
+    And I click "Edit page properties" in the module
+    Then the module heading should be "Edit Page"
+    And the "Page Title" record field should contain "Webship test page"
+    And the "Page Title" record field should not contain "Webship renamed page"
+    When I close the record
+    Then the module heading should be "Webship test page"
+    And the module heading should not be "Edit Page"
+
+  Scenario: Delete a content element from its form
+    When I select the "Congratulations > 404 > Webship test page" page in the page tree
+    And I add a "Header Only" content element to the "Normal" column
+    And I fill in the "Header" record field with "Webship form-deleted header"
+    And I save the record
+    Then I should see the notification "Record saved"
+    When I delete the record
+    Then I should see the dialog "Delete this record?"
+    When I confirm the dialog
+    Then I should not see the "Webship form-deleted header" content element in the page module
 
   Scenario: Rename the page
     When I choose "Edit" from the context menu of the "Congratulations > 404 > Webship test page" page

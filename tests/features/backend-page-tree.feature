@@ -12,6 +12,7 @@ Feature: Page tree
     When I select the "Congratulations" page in the page tree
     Then the module heading should be "Congratulations"
     And I should see "Create new content" in the module
+    And I should not see "Please select a page in the page tree" in the module
 
   Scenario: Reach a deep page by its path
     When I select the "Congratulations > Content Examples > Text > Rich Text" page in the page tree

@@ -22,3 +22,4 @@ Feature: Content elements
   Scenario: Every page names TYPO3 as its generator
     Given I am on the homepage
     Then the page generator should start with "TYPO3"
+    And the page generator should not contain "Example"

@@ -27,4 +27,5 @@ Feature: Search
   Scenario: A search for an unknown word returns nothing
     When I search the site for "zzzqqqxyz"
     Then I should see no search results
+    And I should not see search results
     And I should see "No results found."
