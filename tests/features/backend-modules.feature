@@ -9,7 +9,7 @@ Feature: Backend modules
     Given I am a logged in user with the "admin" user
     When I open the "Page" module
     Then the "Page" module should be active
-    And the module heading should be "TYPO3 Introduction"
+    And the module heading should be "Webship Test Site"
     And I should see the info message "Please select a page in the page tree" in the module
     When I open the "List" module
     Then the "List" module should be active

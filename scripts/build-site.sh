@@ -24,7 +24,7 @@ ddev typo3 setup \
   --server-type=other \
   --driver=mysqli --host=db --port=3306 --dbname=db --username=db --password=db \
   --admin-username=admin --admin-user-password="$TYPO3_ADMIN_PASS" \
-  --project-name="TYPO3 Introduction" \
+  --project-name="Webship Test Site" \
   --no-interaction --force
 ddev composer require typo3/cms-introduction --no-interaction
 

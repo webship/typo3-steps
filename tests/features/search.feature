@@ -18,7 +18,7 @@ Feature: Search
     And I should see "ready to use search" in the "Indexed Search" content element
 
   Scenario: A search lists the pages that contain the word
-    When I search the site for "TYPO3"
+    When I search the site for "extensions"
     Then I should see search results
     And I should see "Features" in the search results
     And I should see "Customize" in the search results

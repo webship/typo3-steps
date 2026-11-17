@@ -345,7 +345,7 @@ Then(/^(I |we )*should( not)* see "([^"]*)?" in the module$/, async function (pr
  * Example #1: Then the module heading should be "Congratulations"
  * Example #2: And the module heading should be "Edit Page"
  * Example #3: Then the module heading should not be "Features"
- * Example #4: And the module heading should be "TYPO3 Introduction"
+ * Example #4: And the module heading should be "Webship Test Site"
  * Example #5: Then the module heading should not be "Access denied"
  *
  */
