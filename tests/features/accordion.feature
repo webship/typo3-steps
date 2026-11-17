@@ -18,6 +18,7 @@ Feature: Accordion content element
   Scenario: Expand a panel and read its content
     When I open the "Media Left" accordion panel
     Then I should see "short video" in the "Media Left" accordion panel
+    And I should not see "larger version" in the "Media Left" accordion panel
 
   Scenario: Opening an open panel leaves it open, and closing hides it
     When I open the "No Media" accordion panel

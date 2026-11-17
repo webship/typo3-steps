@@ -17,6 +17,7 @@ Feature: Main navigation
     When I open the "Customize" menu item
     Then I should be on "/customize"
     And I should be viewing the "Incredible flexible" page
+    And I should not be viewing the "feature set" page
 
   Scenario: Open the Pages page from the main menu
     Given I am on the homepage
@@ -53,6 +54,7 @@ Feature: Main navigation
     Given I am on the homepage
     When I open the dropdown of the "Pages" menu item
     Then I should see the "2 Columns" dropdown link
+    And I should not see the "Features" dropdown link
     When I open the "2 Columns" dropdown link
     Then I should be on "/pages/2-columns"
     And the "Pages" menu item should be active
