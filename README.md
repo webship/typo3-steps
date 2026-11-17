@@ -65,6 +65,124 @@ content (`/content-examples/interactive/accordion`, "Media Left", ...). The
 steps carry no site data: every label, title and phrase is an argument, so
 replace those values with your own content when you copy a feature.
 
+## From nothing to a green run
+
+What the machine needs: Docker, [DDEV](https://ddev.com), git, and Node.js 20
+or later with npm. PHP, Composer and the database run in DDEV's containers.
+
+**1. The TYPO3 site.** The pack's own build script installs TYPO3 13 LTS with
+the Introduction package in a DDEV project and creates the accounts of
+[Test users](#test-users); it takes about a minute.
+
+```bash
+git clone https://github.com/webship/typo3-steps.git
+mkdir typo3-site && cd typo3-site
+bash ../typo3-steps/scripts/build-site.sh
+cd ..
+```
+
+The site answers at `https://typo3-intro.ddev.site`. With
+`DDEV_PROJECT=<name>` in front of the script, the project and the address are
+`<name>` and `https://<name>.ddev.site`.
+
+**2. A test project.**
+
+```bash
+mkdir typo3-tests && cd typo3-tests
+npm init -y
+npm install --save-dev webship-js @webship-js/typo3-steps
+npx init-webship-js
+```
+
+`npx init-webship-js` writes `cucumber.js`, `playwright.config.ts`, the
+`tests/` folders with a first feature and the `npm test` scripts, and installs
+Chromium. npm usually runs it already when it installs webship-js; a second
+run changes nothing.
+
+**3. `cucumber.js`.** Replace the file with the wiring of the pack: the step
+files of webship-js and of the pack, the address of the site, and the accounts
+(the JSON of [Test users](#test-users)).
+
+```javascript
+module.exports = {
+  default: {
+    requireModule: ['tsx/cjs'],
+    require: [
+      'node_modules/webship-js/tests/step-definitions/**/*.js',
+      'node_modules/@webship-js/typo3-steps/tests/step-definitions/**/*.js',
+      'tests/step-definitions/**/*.js',
+    ],
+    paths: ['tests/features/**/*.feature'],
+    format: ['@cucumber/pretty-formatter', 'json:tests/reports/cucumber_report.json'],
+    worldParameters: {
+      launchUrl: process.env.LAUNCH_URL || 'https://typo3-intro.ddev.site',
+      // The waits webship-js adds around each page, scenario and step (milliseconds).
+      minWaitTime: { page: 3000, before_scenario: 0, after_scenario: 0, before_step: 0, after_step: 0 },
+      users: {
+        admin: { username: 'admin', password: 'Introduction!23' },
+        editor: { username: 'editor', password: 'Editor!Review23' },
+      },
+    },
+  },
+};
+```
+
+**4. A first feature**, `tests/features/first-run.feature`:
+
+```gherkin
+Feature: First run
+  Scenario: The editor opens the Page module
+    Given I am a logged in user with the "editor" user
+    When I open the "Page" module
+    Then the "Page" module should be active
+
+  Scenario: A visitor opens the Features page from the main menu
+    Given I am on the homepage
+    When I open the "Features" menu item
+    Then I should be on "/features"
+```
+
+**5. Run it.**
+
+```bash
+npm test
+```
+
+A green first run prints every step, then the summary (the starter feature of
+`npx init-webship-js` and the two scenarios above, passed) and the HTML report
+it wrote:
+
+```
+3 scenarios (3 passed)
+8 steps (8 passed)
+0m06.000s (executing steps: 0m05.900s)
+[webship-js] HTML report → …/tests/reports/cucumber_report.html
+```
+
+From there, copy the features of [`tests/features/`](tests/features/): together
+they use every step of the pack. Replace the titles, labels and texts of the
+Introduction package with those of your site.
+
+### What the suite tests
+
+The features of this repository run every step of the pack against the
+Introduction site, in CI on every change: logging in and out of
+the backend, a refused login, the modules of an administrator and of an editor,
+the page tree (select, expand, collapse, filter, context menu, hidden pages),
+the life of a page and its content (create with validation, enable, add, edit,
+hide, show and delete content elements in the Page and List modules, rename,
+hide and delete the page), the caches, and on the front end the main
+navigation with its dropdowns, mega menu and mobile navbar, the subnavigation
+and breadcrumb, the language menu, content elements, the accordion, Indexed
+Search, the contact form with its validation, the 404 page, the generator and
+an accessibility audit.
+
+Not tested: files and the Filelist module, backend users and groups (the suite
+never creates accounts), the frontend login, workspaces, the scheduler,
+extensions and site configuration, and the form editor beyond its list of
+forms. The backend deletes by flagging: the pages and content elements the
+suite deletes stay in the Recycler.
+
 ## Requirements
 
 - Node.js 20 or later
