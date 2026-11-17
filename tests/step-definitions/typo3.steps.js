@@ -648,11 +648,11 @@ const SEARCH_EMPTY = '.tx-indexedsearch-info-noresult, .frame-type-indexedsearch
  * the words into the search field (`#tx-indexedsearch-searchbox-sword`) and
  * submit. Open the page that carries the search form first.
  *
- * Example #1: When I search the site for "TYPO3"
+ * Example #1: When I search the site for "extensions"
  * Example #2: When I search the site for "multisite"
  * Example #3: When we search the site for "content management"
  * Example #4: And I search the site for "no such word"
- * Example #5: When search the site for "TYPO3"
+ * Example #5: When search the site for "content"
  *
  */
 When(/^(I |we )*search the site for "([^"]*)?"$/, async function (pronounCase, words) {
@@ -839,8 +839,8 @@ Then(/^(I |we )*should( not)* be on the (?:404|page not found) page$/, async fun
  *
  * Example #1: Then the page generator should start with "TYPO3"
  * Example #2: And the page generator should be "TYPO3 CMS"
- * Example #3: Then the page generator should not contain "Joomla"
- * Example #4: But the page generator should not start with "WordPress"
+ * Example #3: Then the page generator should not contain "Example"
+ * Example #4: But the page generator should not start with "Example"
  * Example #5: Then page generator should contain "TYPO3"
  *
  */
