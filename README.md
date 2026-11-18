@@ -85,6 +85,26 @@ The site answers at `https://typo3-intro.ddev.site`. With
 `DDEV_PROJECT=<name>` in front of the script, the project and the address are
 `<name>` and `https://<name>.ddev.site`.
 
+In the [Webship Workspace](https://github.com/webship/workspace), its TYPO3
+plugin builds the site instead, TYPO3 13 LTS with the Introduction package, in
+a sites folder of the workspace (`test/` here; `dev/`, `sandboxes/` and
+`demos/` work the same):
+
+```bash
+bash core/scripts/plugins.sh --require typo3 --with-needs
+bash core/scripts/plugins.sh --activate typo3 --with-needs
+bash core/scripts/plugins.sh --install typo3
+bash test/cmd-typo3-project.sh mysite --install --add-users
+```
+
+That site answers at `https://mysite.ddev.site`. Its accounts are the plugin's
+(`administrator`, an administrator, and `editor`, in the "Advanced editors"
+group, each with the password `dD.123123ddd`; step 3 names them). The features of
+[`tests/features/`](tests/features/) pass there too, but for two lines: the
+site name the script gives, and the "Extensions" module, which TYPO3 shows to
+a system maintainer (the script's `admin` is one, the plugin's `administrator`
+is not).
+
 **2. A test project.**
 
 ```bash
@@ -127,6 +147,11 @@ module.exports = {
 };
 ```
 
+On a site from the Webship Workspace (step 1), the accounts are the plugin's:
+`admin: { username: 'administrator', password: 'dD.123123ddd' }` and
+`editor: { username: 'editor', password: 'dD.123123ddd' }`. Its address goes in
+`LAUNCH_URL` (step 5).
+
 **4. A first feature**, `tests/features/first-run.feature`:
 
 ```gherkin
@@ -148,6 +173,7 @@ Feature: First run
 npm test
 ```
 
+(`LAUNCH_URL=https://mysite.ddev.site npm test` for a site at another address.)
 A green first run prints every step, then the summary (the starter feature of
 `npx init-webship-js` and the two scenarios above, passed) and the HTML report
 it wrote:
