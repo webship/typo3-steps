@@ -67,7 +67,7 @@ replace those values with your own content when you copy a feature.
 
 ## From nothing to a green run
 
-What the machine needs: Docker, [DDEV](https://ddev.com), git, and Node.js 20
+What the machine needs: Docker, [DDEV](https://ddev.com), git, and Node.js 24
 or later with npm. PHP, Composer and the database run in DDEV's containers.
 
 **1. The TYPO3 site.** The pack's own build script installs TYPO3 13 LTS with
@@ -211,7 +211,7 @@ suite deletes stay in the Recycler.
 
 ## Requirements
 
-- Node.js 20 or later
+- Node.js 24 or later
 - A webship-js 2.0 test project
 
 ## Install
